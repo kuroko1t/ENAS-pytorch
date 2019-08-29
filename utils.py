@@ -15,7 +15,7 @@ from torch.autograd import Variable
 
 from PIL import Image
 from PIL import ImageFont
-from PIL import ImageDraw 
+from PIL import ImageDraw
 
 
 try:
@@ -26,7 +26,7 @@ try:
 except:
     import cv2
     imread = cv2.imread
-    imresize = cv2.imresize
+    imresize = cv2.resize
     imsave = imwrite = cv2.imwrite
 
 
@@ -144,8 +144,9 @@ def update_lr(optimizer, lr):
         param_group['lr'] = lr
 
 def batchify(data, bsz, use_cuda):
-    # code from https://github.com/pytorch/examples/blob/master/word_language_model/main.py 
+    # code from https://github.com/pytorch/examples/blob/master/word_language_model/main.py
     nbatch = data.size(0) // bsz
+    #nbatch = len(data.dataset) // bsz
     data = data.narrow(0, 0, nbatch * bsz)
     data = data.view(bsz, -1).t().contiguous()
     if use_cuda:
@@ -256,8 +257,8 @@ def load_dag(args):
     dag = {int(k): [Node(el[0], el[1]) for el in v] for k, v in dag.items()}
     save_dag(args, dag, "dag.json")
     draw_network(dag, os.path.join(args.model_dir, "dag.png"))
-    return dag          
-  
+    return dag
+
 def makedirs(path):
     if not os.path.exists(path):
         logger.info("[*] Make directories : {}".format(path))
